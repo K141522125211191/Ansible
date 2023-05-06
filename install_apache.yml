@@ -1,0 +1,24 @@
+- name: Install Apache
+  hosts: webserver
+  become: yes
+  tasks:
+    - name: Update yum cache
+      ansible.builtin.yum:
+        expire-cache: yes
+
+    - name: Install Apache and PHP
+      ansible.builtin.yum:
+        name:
+          - httpd
+        state: present
+
+    - name: Install mod_rewrite and mod_ssl
+      ansible.builtin.yum:
+        name:
+          - mod_ssl
+        state: present
+
+    - name: Start Apache
+      ansible.builtin.systemd:
+        name: httpd
+        state: started

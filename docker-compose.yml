@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+    web:
+      container_name: ansible-amazon-linux
+      build: .
+      privileged: true
+      ports:
+          - "9678:80"
+          - "2222:22"

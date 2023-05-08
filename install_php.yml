@@ -1,3 +1,4 @@
+---
 - name: Install PHP
   hosts: webserver
   become: yes

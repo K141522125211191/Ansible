@@ -1,0 +1,56 @@
+- name: Update yum cache
+  ansible.builtin.yum:
+    expire-cache: yes
+
+- name: Install PHP and required extensions
+  ansible.builtin.yum:
+    name:
+      - php
+      - php-cli
+      - php-mysqlnd
+      - php-gd
+      - php-mbstring
+      - php-xml
+      - php-curl
+      - php-process
+      - php-common
+    state: present
+  notify:
+    - Restart Apache
+
+- name: Create index.php
+  ansible.builtin.copy:
+    content: "<?php phpinfo(); ?>"
+    dest: /var/www/html/index.php
+    owner: apache
+    group: apache
+    mode: 0640
+  notify:
+    - Restart PHP-FPM
+
+- name: Update PHP-FPM config listen.mode
+  lineinfile:
+    path: /etc/php-fpm.d/www.conf
+    regexp: '^listen\.mode\s*=\s*.+'
+    line: 'listen.mode = 0666'
+  notify:
+    - Restart PHP-FPM
+    - Restart Apache
+
+- name: Update PHP-FPM config listen.acl_users
+  lineinfile:
+    path: /etc/php-fpm.d/www.conf
+    regexp: '^listen\.acl_users\s*=\s*.+'
+    line: ';listen.acl_users = apache,nginx'
+  notify:
+    - Restart PHP-FPM
+    - Restart Apache
+
+- name: Update PHP-FPM config listen.acl_users
+  lineinfile:
+    path: /etc/php-fpm.d/www.conf
+    regexp: '^listen\.acl_users\s*=\s*.+'
+    line: ';listen.acl_users = apache,nginx'
+  notify:
+    - Restart PHP-FPM
+    - Restart Apache

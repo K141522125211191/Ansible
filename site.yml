@@ -1,4 +1,17 @@
-- hosts: web_servers
+- hosts: isucon
   become: yes
   roles:
-    - "{{ role_name }}"
+    - tools
+  tags: tools
+
+- hosts: isucon
+  become: yes
+  roles:
+    - nginx
+  tags: nginx
+
+- hosts: isucon
+  become: yes
+  roles:
+    - logrotate
+  tags: logrotate

@@ -1,0 +1,13 @@
+---
+- name: setting / get current date
+  command: date '+%Y%m%d%H%M%S'
+  register: current_date
+  changed_when: false
+
+- name: setting / move access.log
+  command: mv /var/log/nginx/access.log /var/log/nginx/access.log.{{ current_date.stdout }}
+  args:
+    creates: /var/log/nginx/access.log.{{ current_date.stdout }}
+  notify:
+    - restart nginx
+    - reopen nginx
